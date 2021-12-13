@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookDataFetcher implements DataFetcher<Book> {
 
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
     public BookDataFetcher(BookRepository bookRepository) {

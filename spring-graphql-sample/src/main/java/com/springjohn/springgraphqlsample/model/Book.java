@@ -22,5 +22,4 @@ public class Book {
     private String title;
     private String publisher;
     private String publishedDate;
-
 }

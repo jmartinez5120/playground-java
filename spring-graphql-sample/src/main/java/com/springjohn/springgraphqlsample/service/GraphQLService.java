@@ -1,9 +1,10 @@
 package com.springjohn.springgraphqlsample.service;
 
+import com.springjohn.springgraphqlsample.model.Book;
+import com.springjohn.springgraphqlsample.repository.BookRepository;
 import com.springjohn.springgraphqlsample.service.datafetcher.AllBooksDataFetcher;
 import com.springjohn.springgraphqlsample.service.datafetcher.BookDataFetcher;
 import graphql.GraphQL;
-import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 @Service
 public class GraphQLService {
@@ -27,6 +29,8 @@ public class GraphQLService {
 
     private GraphQL graphQL;
 
+    private final BookRepository bookRepository;
+
     // Determines how the data gets fetched from the database.
     private final AllBooksDataFetcher allBooksDataFetcher;
 
@@ -34,13 +38,18 @@ public class GraphQLService {
     private final BookDataFetcher bookDataFetcher;
 
     @Autowired
-    public GraphQLService(AllBooksDataFetcher allBooksDataFetcher, BookDataFetcher bookDataFetcher) {
+    public GraphQLService(BookRepository bookRepository, AllBooksDataFetcher allBooksDataFetcher, BookDataFetcher bookDataFetcher) {
+        this.bookRepository = bookRepository;
         this.allBooksDataFetcher = allBooksDataFetcher;
         this.bookDataFetcher = bookDataFetcher;
     }
 
     @PostConstruct
     private void loadSchema() throws IOException {
+
+        // load books into the database for example
+        loadDataIntoHSQL();
+
         //get schema
         File schemaFile = resource.getFile();
 
@@ -51,18 +60,29 @@ public class GraphQLService {
         graphQL = GraphQL.newGraphQL(schema).build();
     }
 
+    private void loadDataIntoHSQL() {
+
+        Stream.of(
+                new Book("11232344556767", "Lord of the Rings", "Token", "12/05/1990"),
+                new Book("98723986986743", "Star Wars: Clone Wars", "Lukasfilms", "03/10/1990"),
+                new Book("22739823097537", "Harry Potter", "J.K. Rollin", "07/05/1991"),
+                new Book("438487y5987309", "Captain America", "S. Lee", "01/14/1962")
+        ).forEach(bookRepository::save);
+    }
+
     private RuntimeWiring buildRuntimeWiring() {
         return RuntimeWiring.newRuntimeWiring()
                 .type("Query", typeWiring -> typeWiring
                         .dataFetcher("allBooks", allBooksDataFetcher)
-                        .dataFetcher("book", bookDataFetcher)
-                        )
+                        .dataFetcher("book", bookDataFetcher))
                 .build();
     }
 
     public GraphQL getGraphQL() {
         return graphQL;
     }
+    
+    
 
 }
 
