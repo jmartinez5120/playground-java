@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
-// Annotation need for newer versions of Spring Batch
+//EnableBatchProcessing Annotation need for newer versions of Spring Batch
 @EnableBatchProcessing
 @Configuration
 public class SpringBatchConfig {
