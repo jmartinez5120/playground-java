@@ -4,6 +4,22 @@
  * This is a general purpose Gradle build.
  * Learn more about Gradle by exploring our samples at https://docs.gradle.org/7.4.2/samples
  */
+
+// This line will be executed at the Configuration phase
+println 'Start initialization...'
 task firstTask {
-    println 'Gradle doesnt Rock'
+    // This line will execute only at the configuration phase... Anything outside doFirst() and doLast() will execute
+    // at the configuration phase.
+    println 'Gradle doesnt Rock!!!'
+
+    // This task will be executed at the Execution phase
+    doFirst() {
+        println 'doFirst print.'
+    }
+    // This task will be executed at the Execution phase
+    doLast() {
+        println 'doLast print'
+    }
 }
+// This line will be executed at the Configuration phase
+println 'End initialization...'

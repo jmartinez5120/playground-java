@@ -60,7 +60,7 @@ application {
 }
 ```
 
-### Dependencies
+## Dependencies
 As in Maven, Gradle uses the sections to specify a dependency: group id, artifact and version. In Gradle this is represented as the following:
 `<GroupId>:<Artifact>:<Version>` 
 
@@ -75,4 +75,43 @@ repositories {
     // Will look for the dependecies under the .m2 folder.
     mavenLocal()
 }
+```
+
+## Configurations (Scopes in Maven)
+
+The below configurations comes from the Java plugin in the plugins section.
+* **Implementation** - the dependency will be present at all times, compile, runtime, test, etc. Also when copile, it will be included in the WAR file if is a webapp.
+* **compileOnly** - available only during compile. *Example: lombok, JMapper, Dozer*
+* **runtimeOnly** - available only at runtime. *Example: Logging implementation*
+* **testImplmentation** - will be available during test compile and test runtime.
+* **testCompileOnly** - available only at test compile time. *Example: Junit, Mockito*
+* **testRuntimeOnly** -  available only at test runtime. *Example: Jupiter*
+* **api (used to be compile)** - transient dependencies will be available to the project that is using a dependency market with api.
+
+## Gradle Phases
+There are three phases.
+* Intialization - figures out if is a single project or a multi-module project, creates the build folder with all the required elements
+* Configuration - Detects all the tasks that needs to run. Will also detects if there is a circular task or dependencies, to fail. 
+* Execution - runs the tasks, test and Jar is builded
+
+*Task example: you can execute the below using: `gradle fT` or `gradle firstTask`.*
+``` groovy
+// This line will be executed at the Configuration phase
+println 'Start initialization...'
+task firstTask {
+    // This line will execute only at the configuration phase... Anything outside doFirst() and doLast() will execute
+    // at the configuration phase.
+    println 'Gradle doesnt Rock!!!'
+
+    // This task will be executed at the Execution phase
+    doFirst() {
+        println 'doFirst print.'
+    }
+    // This task will be executed at the Execution phase
+    doLast() {
+        println 'doLast print'
+    }
+}
+// This line will be executed at the Configuration phase
+println 'End initialization...'
 ```
