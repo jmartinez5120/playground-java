@@ -2,6 +2,7 @@ package com.john.springwebfluxsample.fluxandmonoplayground;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 public class FluxAndMonoTest {
@@ -30,7 +31,7 @@ public class FluxAndMonoTest {
     }
 
     @Test
-    public void fluxTestElements_WithoutErrors() {
+    void fluxTestElements_WithoutErrors() {
         Flux<String> stringFlux = Flux.just("Spring", "Spring Boot", "Reactive Spring")
                 .log();
         StepVerifier.create(stringFlux)
@@ -41,7 +42,7 @@ public class FluxAndMonoTest {
     }
 
     @Test
-    public void fluxTestElements_WithErrors() {
+    void fluxTestElements_WithErrors() {
         Flux<String> stringFlux = Flux.just("Spring", "Spring Boot", "Reactive Spring")
                 .concatWith(Flux.error(new RuntimeException("Exception Occurred")))
                 .log();
@@ -55,11 +56,26 @@ public class FluxAndMonoTest {
     }
 
     @Test
-    public void fluxTestElements_NumberOfElements() {
+    void fluxTestElements_NumberOfElements() {
         Flux<String> stringFlux = Flux.just("Spring", "Spring Boot", "Reactive Spring")
                 .log();
         StepVerifier.create(stringFlux)
                 .expectNextCount(3)
                 .verifyComplete(); // Will start the subscriber flow.
+    }
+
+    @Test
+    void monoTest() {
+        Mono<String> monoValue = Mono.just("Spring Mono");
+        StepVerifier.create(monoValue.log())
+                .expectNext("Spring Mono")
+                .verifyComplete();
+    }
+
+    @Test
+    void monoTest_Error() {
+        StepVerifier.create(Mono.error(new RuntimeException("Exception Occurred")).log())
+                .expectError(RuntimeException.class)
+                .verify();
     }
 }
