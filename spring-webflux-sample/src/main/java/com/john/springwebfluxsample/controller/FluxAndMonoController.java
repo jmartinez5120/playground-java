@@ -1,7 +1,11 @@
 package com.john.springwebfluxsample.controller;
 
+import com.john.springwebfluxsample.helper.ComponentOne;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -11,10 +15,17 @@ import java.time.Duration;
 @RestController
 public class FluxAndMonoController {
 
+    private final ComponentOne componentOne;
+
+    @Autowired
+    public FluxAndMonoController(ComponentOne componentOne) {
+        this.componentOne = componentOne;
+    }
+
     @GetMapping("/flux")
     public Flux<Integer> getFlux() {
         return Flux.just(1, 2, 3, 4)
-//                .delayElements(Duration.ofSeconds(1))
+                .delayElements(Duration.ofSeconds(10))
                 .log();
     }
 
@@ -38,5 +49,10 @@ public class FluxAndMonoController {
         return Mono.just(1)
 //                .delayElements(Duration.ofSeconds(1))
                 .log();
+    }
+
+    @PostMapping("/components")
+    public Mono<String> fluxResource(@RequestBody String request) throws InterruptedException {
+        return Mono.just(componentOne.concatString(request)).log();
     }
 }
