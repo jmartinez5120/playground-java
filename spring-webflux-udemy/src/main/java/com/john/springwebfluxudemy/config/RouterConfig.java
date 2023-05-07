@@ -51,6 +51,8 @@ public class RouterConfig {
                 .build();
     }
 
+    // Assigment - Math operation
+
     // NOTE: We should build this in a Controller Advice, but for example purposes is here.
     private BiFunction<Throwable, ServerRequest, Mono<ServerResponse>> exceptionHandler() {
         return (err, req) -> {
