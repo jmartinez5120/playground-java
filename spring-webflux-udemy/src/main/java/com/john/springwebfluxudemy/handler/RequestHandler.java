@@ -14,6 +14,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class RequestHandler {
@@ -75,6 +77,24 @@ public class RequestHandler {
         Mono<Response> responseMono = reactiveMathService.findSquare(input);
         // Here we subscribe to the pipeline, so it starts executing the reactive code.
         return ServerResponse.ok().body(responseMono, Response.class);
+    }
+
+    public Mono<ServerResponse> mathOperationHandler(ServerRequest serverRequest) {
+        int firstNumber = Integer.parseInt(serverRequest.pathVariable("first"));
+        int secondNumber = Integer.parseInt(serverRequest.pathVariable("second"));
+
+        String operation = serverRequest.headers().header("operation").get(0);
+        Mono<Float> result;
+        if (operation == "+"){
+            result = firstNumber + secondNumber;
+        } else if (operation == "-") {
+            result = firstNumber - secondNumber;
+        } else if (operation == "/") {
+            result = firstNumber/secondNumber;
+        } else {
+            result = firstNumber*secondNumber;
+        }
+        return ServerResponse.ok().body()
     }
 
 }
