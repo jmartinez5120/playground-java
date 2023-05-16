@@ -24,7 +24,6 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> functionPath() {
         return RouterFunctions.route()
                 .path("router", this::serverResponseRouterFunction)
-                .path("math", this::serverResponseRouterMathFunction)
                 .build();
     }
 
@@ -49,13 +48,6 @@ public class RouterConfig {
                 // If any of the above functions throws an exception of type RequestValidationException.class, then
                 // it will execute the exceptionHandler function.
                 .onError(RequestValidationException.class, exceptionHandler())
-                .build();
-    }
-
-    // Assigment - Math operation
-    private RouterFunction<ServerResponse> serverResponseRouterMathFunction() {
-        return RouterFunctions.route()
-                .GET("operation/{first}/{second}", requestHandler::mathOperationHandler)
                 .build();
     }
 

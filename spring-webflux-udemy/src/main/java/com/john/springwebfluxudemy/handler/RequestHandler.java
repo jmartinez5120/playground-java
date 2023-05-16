@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 @Component
 @RequiredArgsConstructor
@@ -79,22 +80,28 @@ public class RequestHandler {
         return ServerResponse.ok().body(responseMono, Response.class);
     }
 
-    public Mono<ServerResponse> mathOperationHandler(ServerRequest serverRequest) {
-        int firstNumber = Integer.parseInt(serverRequest.pathVariable("first"));
-        int secondNumber = Integer.parseInt(serverRequest.pathVariable("second"));
+    public Mono<ServerResponse> additionHandler(ServerRequest serverRequest) {
+        return processOperation(serverRequest, (firstNo, secondNo) -> ServerResponse.ok().bodyValue(firstNo + secondNo));
+    }
 
-        String operation = serverRequest.headers().header("operation").get(0);
-        Mono<Float> result;
-        if (operation == "+"){
-            result = firstNumber + secondNumber;
-        } else if (operation == "-") {
-            result = firstNumber - secondNumber;
-        } else if (operation == "/") {
-            result = firstNumber/secondNumber;
-        } else {
-            result = firstNumber*secondNumber;
-        }
-        return ServerResponse.ok().body()
+    public Mono<ServerResponse> subtractionHandler(ServerRequest serverRequest) {
+        return processOperation(serverRequest, (firstNo, secondNo) -> ServerResponse.ok().bodyValue(firstNo - secondNo));
+    }
+
+    public Mono<ServerResponse> multiplicationHandler(ServerRequest serverRequest) {
+        return processOperation(serverRequest, (firstNo, secondNo) -> ServerResponse.ok().bodyValue(firstNo * secondNo));
+    }
+
+    public Mono<ServerResponse> divisionHandler(ServerRequest serverRequest) {
+        return processOperation(serverRequest, (firstNo, secondNo) ->
+            secondNo != 0 ? ServerResponse.ok().bodyValue(firstNo / secondNo) : ServerResponse.badRequest().bodyValue("secondNo cannot be zero.")
+        );
+    }
+
+    private Mono<ServerResponse> processOperation(ServerRequest request, BiFunction<Integer, Integer, Mono<ServerResponse>> opLogic) {
+        int firstNumber = Integer.parseInt(request.pathVariable("firstNo"));
+        int secondNumber = Integer.parseInt(request.pathVariable("secondNo"));
+        return opLogic.apply(firstNumber, secondNumber);
     }
 
 }
