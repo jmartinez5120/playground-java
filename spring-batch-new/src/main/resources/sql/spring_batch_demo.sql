@@ -1,4 +1,4 @@
-create table dummy_data.spring_batch_demo
+create table dummy_data.person
 (
     id serial primary key ,
     first_name varchar(50),
