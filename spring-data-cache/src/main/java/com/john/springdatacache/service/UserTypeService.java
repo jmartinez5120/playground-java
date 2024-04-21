@@ -20,11 +20,18 @@ public class UserTypeService {
     // OPTION #2 - Creating a new cache record, at the same time the data it's been created in the database.
     // Adds a new value to the Cache.
     public UserTypeEntity createUserType(String type, String description) {
-        UserTypeEntity userTypeEntity = new UserTypeEntity();
-        userTypeEntity.setDescription(description);
-        userTypeEntity.setType(type);
-        userTypeEntity.setCreatedBy("john");
-        userTypeEntity.setCreatedDatetime(LocalDateTime.now());
+        UserTypeEntity userTypeEntity = userTypeRepository.findByType(type);
+        if (userTypeEntity != null) {
+            userTypeEntity.setDescription(description);
+            userTypeEntity.setLastUpdatedBy("berto");
+            userTypeEntity.setLastUpdatedDatetime(LocalDateTime.now());
+        } else {
+            userTypeEntity = new UserTypeEntity();
+            userTypeEntity.setDescription(description);
+            userTypeEntity.setType(type);
+            userTypeEntity.setCreatedBy("john");
+            userTypeEntity.setCreatedDatetime(LocalDateTime.now());
+        }
         return userTypeRepository.save(userTypeEntity);
     }
 

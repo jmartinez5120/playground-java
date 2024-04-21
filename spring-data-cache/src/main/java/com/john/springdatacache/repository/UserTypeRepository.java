@@ -19,6 +19,7 @@ public interface UserTypeRepository extends JpaRepository<UserTypeEntity, Long> 
     @CacheEvict(value = "initUserTypeCache", key = "#type")
     void deleteByType(String type);
 
+    // Creates or updates a record in the database or cache.
     @Override
     @CachePut(value = "initUserTypeCache", key = "#userTypeEntity.type")
     <S extends UserTypeEntity> S save(@NonNull S userTypeEntity);
