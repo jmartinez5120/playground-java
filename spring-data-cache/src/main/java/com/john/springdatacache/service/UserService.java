@@ -34,7 +34,7 @@ public class UserService {
         // FIRST WAY of doing the cache - fetching the information when request it and cache it.
 //        UserTypeEntity userTypeEntity = userTypeCacheProxyHandler.getUserTypeByType(userType);
         // SECOND WAY of doing the cache - load into cache all the values on PostConstruct.
-        UserTypeEntity userTypeEntity = userTypeRepository.findByType(UserType.valueOf(userType));
+        UserTypeEntity userTypeEntity = userTypeRepository.findByType(userType);
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName(firstName);
         userEntity.setLastName(lastName);

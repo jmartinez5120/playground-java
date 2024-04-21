@@ -26,8 +26,7 @@ public class UserTypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private UserType type;
+    private String type;
 
     private String description;
 

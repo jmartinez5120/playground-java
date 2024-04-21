@@ -1,9 +1,9 @@
-package com.john.springdatacache.service;
+package com.john.springdatacache.controller;
 
 import lombok.Data;
 
 @Data
-public class User {
+public class UserRequest {
 
     private String firstName;
     private String lastName;

@@ -1,7 +1,6 @@
 package com.john.springdatacache.controller;
 
 import com.john.springdatacache.entity.UserEntity;
-import com.john.springdatacache.service.User;
 import com.john.springdatacache.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserEntity createUser(@RequestBody User user){
-        return userService.executeCreateUser(user.getFirstName(), user.getLastName(), user.getType());
+    public UserEntity createUser(@RequestBody UserRequest userRequest){
+        return userService.executeCreateUser(userRequest.getFirstName(), userRequest.getLastName(), userRequest.getType());
     }
 }
