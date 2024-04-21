@@ -22,6 +22,8 @@ public class UserService {
 
     private final UserTypeCacheProxyHandler userTypeCacheProxyHandler;
 
+    private final UserTypeRepository userTypeRepository;
+
     private final UserRepository userRepository;
 
     public List<UserEntity> executeGetUsersResource(){
@@ -29,7 +31,10 @@ public class UserService {
     }
 
     public UserEntity executeCreateUser(String firstName, String lastName, String userType){
-        UserTypeEntity userTypeEntity = userTypeCacheProxyHandler.getUserTypeByType(userType);
+        // FIRST WAY of doing the cache - fetching the information when request it and cache it.
+//        UserTypeEntity userTypeEntity = userTypeCacheProxyHandler.getUserTypeByType(userType);
+        // SECOND WAY of doing the cache - load into cache all the values on PostConstruct.
+        UserTypeEntity userTypeEntity = userTypeRepository.findByType(UserType.valueOf(userType));
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName(firstName);
         userEntity.setLastName(lastName);

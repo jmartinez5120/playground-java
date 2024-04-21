@@ -18,6 +18,14 @@ public class UserTypeCacheProxyHandler {
     @Cacheable("userTypes")
     public UserTypeEntity getUserTypeByType(String type) {
         log.info("Fetching user type by type from the database, instead of cache: {}", type);
+        // NOTE: This is to test that the first time it fetches the data from the DB, it takes 5 seconds, but the second
+        // time it would be instantly.
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            log.error("Interrupted while waiting for user type to fetch", e);
+            Thread.currentThread().interrupt();
+        }
         return userTypeRepository.findByType(UserType.valueOf(type));
     }
 }
