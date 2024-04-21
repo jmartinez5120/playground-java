@@ -39,6 +39,4 @@ public class UserTypeEntity {
 
     private LocalDateTime lastUpdatedDatetime;
 
-    /*@OneToMany(mappedBy = "userType")
-    private List<UserEntity> userEntity;*/
 }

@@ -16,6 +16,6 @@ public class UserConfig {
     @Bean
     public CacheManager cacheManager() {
         log.info("User Type it's been loaded into memory...");
-        return new ConcurrentMapCacheManager("userTypeEntity");
+        return new ConcurrentMapCacheManager("userTypes");
     }
 }

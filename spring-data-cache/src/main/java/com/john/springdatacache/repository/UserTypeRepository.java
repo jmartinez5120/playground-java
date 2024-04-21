@@ -1,5 +1,6 @@
 package com.john.springdatacache.repository;
 
+import com.john.springdatacache.entity.UserType;
 import com.john.springdatacache.entity.UserTypeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserTypeRepository extends JpaRepository<UserTypeEntity, Long> {
 
-    UserTypeEntity findByType(String type);
+    UserTypeEntity findByType(UserType type);
 }
