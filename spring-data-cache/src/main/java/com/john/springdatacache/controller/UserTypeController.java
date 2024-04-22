@@ -4,8 +4,6 @@ import com.john.springdatacache.entity.UserTypeEntity;
 import com.john.springdatacache.service.UserTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.cache.Cache;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Log4j2
@@ -24,9 +20,7 @@ import java.util.Map;
 public class UserTypeController {
 
     private final UserTypeService userTypeService;
-
-    private final CaffeineCacheManager cacheManager;
-
+    
     @PostMapping
     public UserTypeEntity createUserType(@RequestBody UserTypeRequest userTypeRequest) {
         return userTypeService.createUserType(userTypeRequest.getType(), userTypeRequest.getDescription());
@@ -42,19 +36,4 @@ public class UserTypeController {
         log.info("Deleting user type {}", userTypeRequest.getType());
         userTypeService.deleteUserType(userTypeRequest.getType());
     }
-
-    @GetMapping("/cache")
-    public Map<String, UserTypeEntity> getUserTypeCache() {
-        Map<String, UserTypeEntity> allCacheContents = new HashMap<>();
-
-        // Iterate over each cache
-        Cache cache = cacheManager.getCache("initUserTypeCache");
-        if (cache != null) {
-//            com.github.benmanes.caffeine.cache.Cache<Object, Object> caches = cache.getNativeCache();
-        }
-
-
-        return allCacheContents;
-    }
-
 }
